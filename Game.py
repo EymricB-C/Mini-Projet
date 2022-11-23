@@ -1,6 +1,13 @@
 def newBoard(n):
-    board = [[0]*n]*n
-    return board
+    board = []
+    for i in range(n):
+        row = []
+        for j in range(n):
+            row.append(0)
+        else:
+            board.append(row)
+    else:
+        return board
 
 def displayBoard(board, n):
     separation = "  " + "--"*(n+1)
