@@ -40,7 +40,7 @@ def displays(board, n, score, player):
 
 #Square selection
 def possibleSquare(board, n, i, j):
-    if i < n and j < n:
+    if i < n and j < n and i >= 0 and j >= 0:
         return True if(board[i][j] == 0) else False
     else:
         print("\nEntrez un carré valide\n")
@@ -94,15 +94,16 @@ def diagonal(board, n, i, j, player):
     tempj = j
     score = 0
     
-    
-    
-    while board[tempi-1][tempj-1] == player:
-        score += 1
-        tempi -= 1
-        tempj -= 1
-    else:
-        tempi = i
-        tempj = j
+    if tempi - 1 > 0 and tempj -1 > 0:
+        while board[tempi-1][tempj-1] == player:
+            score += 1
+            tempi -= 1
+            tempj -= 1
+        else:
+            tempi = i
+            tempj = j
+
+    if tempi + 1 < n and tempj + 1 < n:
         while board[tempi+1][tempj+1] == player:
             score += 1
             tempi += 1
@@ -110,24 +111,29 @@ def diagonal(board, n, i, j, player):
         else:
             tempi = i
             tempj = j
-            while board[tempi+1][tempj-1] == player:
-                score += 1
-                tempi += 1
-                tempj -= 1
-            else:
-                tempi = i
-                tempj = j
-                while board[tempi-1][tempj+1] == player:
-                    score += 1
-                    tempi -= 1
-                    tempj += 1
-                else:
-                    tempi = i
-                    tempj = j
-                    if score > 0:
-                        return (score+1)
-                    else:
-                        return score
+
+    if tempi + 1 < n and tempj -1 > 0:
+        while board[tempi+1][tempj-1] == player:
+            score += 1
+            tempi += 1
+            tempj -= 1
+        else:
+            tempi = i
+            tempj = j
+
+    if tempi - 1 > 0 and tempj + 1 < n:
+        while board[tempi-1][tempj+1] == player:
+            score += 1
+            tempi -= 1
+            tempj += 1
+        else:
+            tempi = i
+            tempj = j
+
+    if score > 0:
+        return (score+1)
+    else:
+        return score
 
 #Game
 def diagonals(n):
@@ -145,8 +151,6 @@ def diagonals(n):
             player = 3 - player
 
             displays(board, n, score, player)
-        else:
-            choosenSquare = selectSquare(board, n)
     else:
         win(score)
 
