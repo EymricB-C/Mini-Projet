@@ -140,7 +140,7 @@ def diagonal(board, n, i, j, player):
     else:
         return score
 
-#Game
+#Game Total
 def diagonals(n):
     score = [0, 0]
     board = newBoard(n)
