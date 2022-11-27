@@ -13,19 +13,23 @@ def newBoard(n):
 def displayBoard(board, n):
     separation = "  " + "--"*(n+1)
     bottom = "    "
+    if n >= 10:
+        separation += "-"*(n+1)
+        bottom += " "
     for i in range(n):
-        row = f"{i+1} | "
+        row = f"{i+1} "
         values = ""
+        if n >= 10 and i < 9:
+            row += " "
+            bottom += " "
+        row += "| "
         for j in range(n):
-            if board[i][j] == 1:
-                values += 'x '
-            elif board[i][j] == 2:
-                values += 'o '
-            else:
-                values += '. '
+            if n >= 10:
+                values += " "
+            values += "x " if board[i][j] == 1 else "o " if board[i][j] == 2 else ". "
         row +=values
-        print(row)
         bottom += str(i+1) + " "
+        print(row)
     else:
         print(separation)
         print(bottom)
@@ -86,49 +90,50 @@ def again(board, n):
             return False
 
 def win(score):
-    print(score)
+    if score[0] > score[1] :
+        return f"Player 1 have won : {score[0]} vs {score[1]}"
+    elif score[0] < score[1]:
+        return f"Player 2 have won : {score[0]} vs {score[1]}"
+    else:
+        return "same score, no winner"
 
 #Diagonal
 def diagonal(board, n, i, j, player):
     tempi = i
     tempj = j
     score = 0
-    
-    if tempi - 1 > 0 and tempj -1 > 0:
-        while board[tempi-1][tempj-1] == player:
-            score += 1
-            tempi -= 1
-            tempj -= 1
-        else:
-            tempi = i
-            tempj = j
 
-    if tempi + 1 < n and tempj + 1 < n:
-        while board[tempi+1][tempj+1] == player:
-            score += 1
-            tempi += 1
-            tempj += 1
-        else:
-            tempi = i
-            tempj = j
+    while tempi - 1 >= 0 and tempj - 1 >= 0 and board[tempi-1][tempj-1] == player:
+        score += 1
+        tempi -= 1
+        tempj -= 1
+    else:
+        tempi = i
+        tempj = j
 
-    if tempi + 1 < n and tempj -1 > 0:
-        while board[tempi+1][tempj-1] == player:
-            score += 1
-            tempi += 1
-            tempj -= 1
-        else:
-            tempi = i
-            tempj = j
+    while tempi + 1 < n and tempj + 1 < n and board[tempi+1][tempj+1] == player:
+        score += 1
+        tempi += 1
+        tempj += 1
+    else:
+        tempi = i
+        tempj = j
 
-    if tempi - 1 > 0 and tempj + 1 < n:
-        while board[tempi-1][tempj+1] == player:
-            score += 1
-            tempi -= 1
-            tempj += 1
-        else:
-            tempi = i
-            tempj = j
+    while tempi + 1 < n and tempj -1 >= 0 and board[tempi+1][tempj-1] == player:
+        score += 1
+        tempi += 1
+        tempj -= 1
+    else:
+        tempi = i
+        tempj = j
+
+    while tempi - 1 >= 0 and tempj + 1 < n and board[tempi-1][tempj+1] == player:
+        score += 1
+        tempi -= 1
+        tempj += 1
+    else:
+        tempi = i
+        tempj = j
 
     if score > 0:
         return (score+1)
@@ -147,11 +152,16 @@ def diagonals(n):
         if type(choosenSquare) == list:
             updateBoard(board, player, choosenSquare[0], choosenSquare[1])
             updateScore(board, n, player, score, choosenSquare[0], choosenSquare[1])
-
             player = 3 - player
-
             displays(board, n, score, player)
     else:
-        win(score)
+        print(win(score))
 
-diagonals(4)
+def start():
+    lengthInput = input("\nHow many rows/columns do you want : ")
+    if lengthInput.isdecimal() and int(lengthInput) > 0:
+        diagonals(int(lengthInput))
+    else:
+        start()
+
+start()
